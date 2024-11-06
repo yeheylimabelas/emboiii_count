@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Emboiii Count</title>
+    <!-- Link ke Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="Icon.jpeg" type="image/x-icon" />
+    <style>
+      body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f4f4f9;
+      }
+      .container {
+        text-align: center;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+      .time {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+      .counter {
+        font-size: 3rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Menampilkan jam UTC+7 -->
+      <div id="current-time" class="time"></div>
+
+      <!-- Menampilkan counter -->
+      <div id="counter" class="counter">0</div>
+
+      <!-- Tombol untuk menambah angka -->
+      <button id="add-button" class="btn btn-primary">Tambah+</button>
+
+      <!-- Tabel untuk menampilkan data -->
+      <table class="table mt-4">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Hitungan Count</th>
+            <th>Selisih</th>
+          </tr>
+        </thead>
+        <tbody id="counter-table">
+          <!-- Baris akan ditambahkan di sini -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Link ke Bootstrap JS dan dependencies (Popper.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+    <script>
+      // Fungsi untuk menampilkan jam UTC+7
+      function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString("en-GB", {
+          timeZone: "Asia/Jakarta", // Pastikan zona waktu yang digunakan benar
+        });
+        document.getElementById(
+          "current-time"
+        ).textContent = `Jam Sekarang: ${timeString}`;
+      }
+
+      // Memperbarui jam setiap detik
+      setInterval(updateTime, 1000);
+
+      // Inisialisasi counter
+      let count = 0;
+      let previousTime = null;
+
+      // Fungsi untuk menambah angka dan memperbarui tabel
+      document
+        .getElementById("add-button")
+        .addEventListener("click", function () {
+          count++;
+          document.getElementById("counter").textContent = count;
+
+          // Ambil waktu saat ini
+          const now = new Date();
+          const timeString = now.toLocaleTimeString("en-GB", {
+            timeZone: "Asia/Jakarta",
+          });
+
+          // Hitung selisih waktu jika ada baris sebelumnya
+          let timeDifference = "";
+          if (previousTime) {
+            // Selisih waktu dalam detik
+            const diffInSeconds = Math.floor((now - previousTime) / 1000);
+            const hours = Math.floor(diffInSeconds / 3600);
+            const minutes = Math.floor((diffInSeconds % 3600) / 60);
+            const seconds = diffInSeconds % 60;
+            timeDifference = `${hours} j ${minutes} m ${seconds} d`;
+          }
+
+          // Update tabel
+          const tableBody = document.getElementById("counter-table");
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${count}</td>
+            <td>${timeString}</td>
+            <td>${timeDifference}</td>
+          `;
+          tableBody.appendChild(row);
+
+          // Update waktu sebelumnya
+          previousTime = now;
+        });
+
+      // Panggil updateTime sekali pada awal untuk menampilkan jam saat pertama kali
+      updateTime();
+    </script>
+  </body>
+</html>
