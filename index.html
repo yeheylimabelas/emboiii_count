@@ -126,6 +126,25 @@
 
       // Panggil updateTime sekali pada awal untuk menampilkan jam saat pertama kali
       updateTime();
+
+      // Fitur untuk menjaga perangkat tetap aktif (Screen Wake Lock API)
+      async function enableWakeLock() {
+        if ("wakeLock" in navigator) {
+          try {
+            await navigator.wakeLock.request("screen");
+            console.log("Wake Lock activated!");
+          } catch (err) {
+            console.error("Wake Lock request failed: ", err);
+          }
+        } else {
+          console.log("Wake Lock API is not supported on this device/browser.");
+        }
+      }
+
+      // Mengaktifkan Wake Lock API saat halaman dimuat
+      window.addEventListener("load", () => {
+        enableWakeLock();
+      });
     </script>
   </body>
 </html>
