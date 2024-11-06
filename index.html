@@ -54,7 +54,7 @@
           <tr>
             <th>No</th>
             <th>Hitungan Count</th>
-            <th>Selisih</th>
+            <th>Selisih Sebelumnya</th>
           </tr>
         </thead>
         <tbody id="counter-table">
@@ -107,7 +107,11 @@
             const hours = Math.floor(diffInSeconds / 3600);
             const minutes = Math.floor((diffInSeconds % 3600) / 60);
             const seconds = diffInSeconds % 60;
-            timeDifference = `${hours} j ${minutes} m ${seconds} d`;
+            timeDifference = `
+              <span style="color: #1d3c6a;">${hours} jam</span>
+              <span style="color: #8b0000;">${minutes} menit</span>
+              <span style="color: #006400;">${seconds} detik</span>
+            `;
           }
 
           // Update tabel
