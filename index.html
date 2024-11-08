@@ -35,6 +35,11 @@
         font-weight: bold;
         margin-bottom: 20px;
       }
+      /* Menambahkan styling untuk baris Jumlah */
+      #total-row {
+        background-color: #d3d3d3; /* Warna abu-abu */
+        font-weight: bold;
+      }
     </style>
   </head>
   <body>
@@ -60,6 +65,12 @@
         <tbody id="counter-table">
           <!-- Baris akan ditambahkan di sini -->
         </tbody>
+        <tfoot>
+          <tr id="total-row">
+            <td colspan="2">Jumlah</td>
+            <td id="total-time">0 jam 0 menit 0 detik</td>
+          </tr>
+        </tfoot>
       </table>
     </div>
 
@@ -82,9 +93,10 @@
       // Memperbarui jam setiap detik
       setInterval(updateTime, 1000);
 
-      // Inisialisasi counter
+      // Inisialisasi counter dan variabel total waktu
       let count = 0;
       let previousTime = null;
+      let totalSeconds = 0; // Menyimpan total waktu dalam detik
 
       // Fungsi untuk menambah angka dan memperbarui tabel
       document
@@ -101,9 +113,10 @@
 
           // Hitung selisih waktu jika ada baris sebelumnya
           let timeDifference = "";
+          let diffInSeconds = 0;
           if (previousTime) {
             // Selisih waktu dalam detik
-            const diffInSeconds = Math.floor((now - previousTime) / 1000);
+            diffInSeconds = Math.floor((now - previousTime) / 1000);
             const hours = Math.floor(diffInSeconds / 3600);
             const minutes = Math.floor((diffInSeconds % 3600) / 60);
             const seconds = diffInSeconds % 60;
@@ -112,12 +125,15 @@
               <span style="color: #8b0000;">${minutes} menit</span>
               <span style="color: #006400;">${seconds} detik</span>
             `;
+
+            // Tambahkan waktu ke total
+            totalSeconds += diffInSeconds;
           }
 
           // Update tabel
           const tableBody = document.getElementById("counter-table");
           const row = document.createElement("tr");
-          row.innerHTML = `
+          row.innerHTML = ` 
             <td>${count}</td>
             <td>${timeString}</td>
             <td>${timeDifference}</td>
@@ -126,7 +142,22 @@
 
           // Update waktu sebelumnya
           previousTime = now;
+
+          // Update baris jumlah total waktu
+          updateTotalTime();
         });
+
+      // Fungsi untuk menghitung dan menampilkan jumlah total waktu
+      function updateTotalTime() {
+        const totalHours = Math.floor(totalSeconds / 3600);
+        const totalMinutes = Math.floor((totalSeconds % 3600) / 60);
+        const totalSecondsRemaining = totalSeconds % 60;
+
+        // Update baris total waktu di bawah tabel
+        document.getElementById(
+          "total-time"
+        ).textContent = `${totalHours} jam ${totalMinutes} menit ${totalSecondsRemaining} detik`;
+      }
 
       // Panggil updateTime sekali pada awal untuk menampilkan jam saat pertama kali
       updateTime();
